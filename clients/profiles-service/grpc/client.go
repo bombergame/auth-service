@@ -1,4 +1,4 @@
-package profilesgrpc
+package grpc
 
 import (
 	"context"
@@ -29,7 +29,7 @@ func (c *Client) Connect() error {
 	var err error
 	c.conn, err = grpc.Dial(config.ProfilesServiceGrpcAddress, grpc.WithInsecure())
 	if err != nil {
-		return err
+		return wrapError(err)
 	}
 
 	c.client = NewProfilesServiceClient(c.conn)

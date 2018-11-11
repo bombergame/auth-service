@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package profilesgrpc;
+package grpc;
 
 service ProfilesService {
     rpc GetProfileIDByCredentials(Credentials) returns(ProfileID) {}
