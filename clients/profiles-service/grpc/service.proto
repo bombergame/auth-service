@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package profilesgrpc;
+
+service ProfilesService {
+    rpc GetProfileIDByCredentials(Credentials) returns(ProfileID) {}
+}
+
+message Credentials {
+    string username = 1;
+    string password = 2;
+}
+
+message ProfileID {
+    int64 value = 1;
+}
