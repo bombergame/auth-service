@@ -19,6 +19,11 @@ func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := cr.Validate(); err != nil {
+		srv.writeErrorWithBody(w, err)
+		return
+	}
+
 	id, err := srv.config.ProfilesGrpc.GetProfileIDByCredentials(
 		&profilesgrpc.Credentials{
 			Username: cr.Username,
