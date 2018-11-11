@@ -2,6 +2,9 @@ package rest
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
+	"github.com/bombergame/common/consts"
 	"github.com/bombergame/common/errs"
 	"net/http"
 )
@@ -22,6 +25,15 @@ func (w *LoggingResponseWriter) Write(b []byte) (int, error) {
 func (w *LoggingResponseWriter) WriteHeader(status int) {
 	w.status = status
 	w.writer.WriteHeader(status)
+}
+
+func (srv *Service) readHeaderString(name string, r *http.Request) (string, error) {
+	v := r.Header.Get(name)
+	if v == consts.EmptyString {
+		errMsg := fmt.Sprintf(`header "%s" not set`, name)
+		return consts.EmptyString, errs.NewServiceError(errors.New(errMsg))
+	}
+	return v, nil
 }
 
 func (srv *Service) readRequestBody(v interface{}, r *http.Request) error {

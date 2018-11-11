@@ -2,7 +2,9 @@ package rest
 
 import (
 	"context"
+	profilesgrpc "github.com/bombergame/auth-service/clients/profiles-service/grpc"
 	"github.com/bombergame/auth-service/config"
+	"github.com/bombergame/auth-service/utils"
 	"github.com/bombergame/common/logs"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -15,7 +17,9 @@ type Service struct {
 }
 
 type Config struct {
-	Logger *logs.Logger
+	Logger       *logs.Logger
+	TokenManager utils.TokenManager
+	ProfilesGrpc *profilesgrpc.Client
 }
 
 func NewService(c *Config) *Service {
