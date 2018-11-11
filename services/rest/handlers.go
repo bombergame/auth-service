@@ -3,11 +3,13 @@ package rest
 import (
 	profilesgrpc "github.com/bombergame/auth-service/clients/profiles-service/grpc"
 	"github.com/bombergame/auth-service/utils"
+	"github.com/bombergame/common/consts"
+	"github.com/bombergame/common/errs"
 	"net/http"
 )
 
 func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
-	userAgent, err := srv.readHeaderString("X-User-Agent", r)
+	userAgent, err := srv.readUserAgent(r)
 	if err != nil {
 		srv.writeErrorWithBody(w, err)
 		return
@@ -55,5 +57,29 @@ func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func (srv *Service) deleteSession(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	_, err := srv.readAuthToken(r)
+	if err != nil {
+		srv.writeErrorWithBody(w, err)
+		return
+	}
+
+	srv.writeOk(w)
+}
+
+func (srv *Service) readUserAgent(r *http.Request) (string, error) {
+	return srv.readHeaderString("X-User-Agent", r)
+}
+
+func (srv *Service) readAuthToken(r *http.Request) (string, error) {
+	bearer, err := srv.readHeaderString("Authorization", r)
+	if err != nil {
+		return bearer, err
+	}
+
+	n := len("Bearer ")
+	if len(bearer) <= n {
+		return consts.EmptyString, errs.NewInvalidFormatError("wrong authorization token")
+	}
+
+	return bearer[n:], nil
 }
