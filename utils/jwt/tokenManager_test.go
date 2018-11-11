@@ -12,7 +12,7 @@ func TestTokenManagerUnit(t *testing.T) {
 	}
 
 	info := utils.UserInfo{
-		ProfileID:  100,
+		ProfileID: 100,
 		UserAgent: "some-user-agent",
 	}
 
