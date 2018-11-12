@@ -3,14 +3,15 @@ syntax = "proto3";
 package grpc;
 
 service AuthService {
-    rpc GetProfileIDByToken(ProfileID) returns(ProfileID) {}
-    rpc DeleteAllSessionsByID(ProfileID) returns(Void) {}
+    rpc GetProfileID(AuthInfo) returns(ProfileID) {}
+    rpc DeleteAllSessions(ProfileID) returns(Void) {}
 }
 
 message Void {}
 
-message Token {
-    string value = 1;
+message AuthInfo {
+    string token = 1;
+    string userAgent = 2;
 }
 
 message ProfileID {

@@ -53,41 +53,49 @@ func (m *Void) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Void proto.InternalMessageInfo
 
-type Token struct {
-	Value                string   `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+type AuthInfo struct {
+	Token                string   `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	UserAgent            string   `protobuf:"bytes,2,opt,name=userAgent,proto3" json:"userAgent,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Token) Reset()         { *m = Token{} }
-func (m *Token) String() string { return proto.CompactTextString(m) }
-func (*Token) ProtoMessage()    {}
-func (*Token) Descriptor() ([]byte, []int) {
+func (m *AuthInfo) Reset()         { *m = AuthInfo{} }
+func (m *AuthInfo) String() string { return proto.CompactTextString(m) }
+func (*AuthInfo) ProtoMessage()    {}
+func (*AuthInfo) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a0b84a42fa06f626, []int{1}
 }
 
-func (m *Token) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Token.Unmarshal(m, b)
+func (m *AuthInfo) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AuthInfo.Unmarshal(m, b)
 }
-func (m *Token) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Token.Marshal(b, m, deterministic)
+func (m *AuthInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AuthInfo.Marshal(b, m, deterministic)
 }
-func (m *Token) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Token.Merge(m, src)
+func (m *AuthInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthInfo.Merge(m, src)
 }
-func (m *Token) XXX_Size() int {
-	return xxx_messageInfo_Token.Size(m)
+func (m *AuthInfo) XXX_Size() int {
+	return xxx_messageInfo_AuthInfo.Size(m)
 }
-func (m *Token) XXX_DiscardUnknown() {
-	xxx_messageInfo_Token.DiscardUnknown(m)
+func (m *AuthInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_AuthInfo.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Token proto.InternalMessageInfo
+var xxx_messageInfo_AuthInfo proto.InternalMessageInfo
 
-func (m *Token) GetValue() string {
+func (m *AuthInfo) GetToken() string {
 	if m != nil {
-		return m.Value
+		return m.Token
+	}
+	return ""
+}
+
+func (m *AuthInfo) GetUserAgent() string {
+	if m != nil {
+		return m.UserAgent
 	}
 	return ""
 }
@@ -133,25 +141,27 @@ func (m *ProfileID) GetValue() int64 {
 
 func init() {
 	proto.RegisterType((*Void)(nil), "grpc.Void")
-	proto.RegisterType((*Token)(nil), "grpc.Token")
+	proto.RegisterType((*AuthInfo)(nil), "grpc.AuthInfo")
 	proto.RegisterType((*ProfileID)(nil), "grpc.ProfileID")
 }
 
 func init() { proto.RegisterFile("service.proto", fileDescriptor_a0b84a42fa06f626) }
 
 var fileDescriptor_a0b84a42fa06f626 = []byte{
-	// 174 bytes of a gzipped FileDescriptorProto
+	// 198 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2d, 0x4e, 0x2d, 0x2a,
 	0xcb, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x49, 0x2f, 0x2a, 0x48, 0x56,
-	0x62, 0xe3, 0x62, 0x09, 0xcb, 0xcf, 0x4c, 0x51, 0x92, 0xe5, 0x62, 0x0d, 0xc9, 0xcf, 0x4e, 0xcd,
-	0x13, 0x12, 0xe1, 0x62, 0x2d, 0x4b, 0xcc, 0x29, 0x4d, 0x95, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c,
-	0x82, 0x70, 0x94, 0x14, 0xb9, 0x38, 0x03, 0x8a, 0xf2, 0xd3, 0x32, 0x73, 0x52, 0x3d, 0x5d, 0x50,
-	0x95, 0x30, 0x43, 0x95, 0x18, 0x35, 0x30, 0x72, 0x71, 0x3b, 0x96, 0x96, 0x64, 0x04, 0x43, 0x6c,
-	0x11, 0xb2, 0xe4, 0x12, 0x76, 0x4f, 0x2d, 0x81, 0xeb, 0x72, 0xaa, 0x84, 0x98, 0xcf, 0xaf, 0x07,
-	0xb2, 0x57, 0x0f, 0x2e, 0x2e, 0x85, 0x2e, 0xa0, 0xc4, 0x20, 0x64, 0xc6, 0x25, 0xea, 0x92, 0x9a,
-	0x93, 0x5a, 0x92, 0xea, 0x98, 0x93, 0x13, 0x9c, 0x5a, 0x5c, 0x9c, 0x99, 0x9f, 0x57, 0xec, 0x54,
-	0xe9, 0xe9, 0x82, 0xa9, 0x99, 0x0b, 0x22, 0x00, 0xf6, 0x02, 0x43, 0x12, 0x1b, 0xd8, 0x67, 0xc6,
-	0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x8c, 0x8d, 0x3b, 0x98, 0xea, 0x00, 0x00, 0x00,
+	0x62, 0xe3, 0x62, 0x09, 0xcb, 0xcf, 0x4c, 0x51, 0xb2, 0xe3, 0xe2, 0x70, 0x2c, 0x2d, 0xc9, 0xf0,
+	0xcc, 0x4b, 0xcb, 0x17, 0x12, 0xe1, 0x62, 0x2d, 0xc9, 0xcf, 0x4e, 0xcd, 0x93, 0x60, 0x54, 0x60,
+	0xd4, 0xe0, 0x0c, 0x82, 0x70, 0x84, 0x64, 0xb8, 0x38, 0x4b, 0x8b, 0x53, 0x8b, 0x1c, 0xd3, 0x53,
+	0xf3, 0x4a, 0x24, 0x98, 0xc0, 0x32, 0x08, 0x01, 0x25, 0x45, 0x2e, 0xce, 0x80, 0xa2, 0xfc, 0xb4,
+	0xcc, 0x9c, 0x54, 0x4f, 0x17, 0x90, 0x01, 0x65, 0x89, 0x39, 0xa5, 0xa9, 0x60, 0x03, 0x98, 0x83,
+	0x20, 0x1c, 0xa3, 0x12, 0x2e, 0x6e, 0x90, 0x15, 0xc1, 0x10, 0x57, 0x08, 0x19, 0x72, 0xf1, 0xb8,
+	0xa7, 0x96, 0x20, 0x34, 0xf1, 0xe9, 0x81, 0x1c, 0xa4, 0x07, 0x73, 0x85, 0x14, 0x3f, 0x84, 0x0f,
+	0x57, 0xa0, 0xc4, 0x20, 0x64, 0xc4, 0x25, 0xe8, 0x92, 0x9a, 0x93, 0x5a, 0x92, 0xea, 0x98, 0x93,
+	0x13, 0x9c, 0x5a, 0x5c, 0x9c, 0x99, 0x9f, 0x57, 0x2c, 0x84, 0xae, 0x4e, 0x8a, 0x0b, 0x22, 0x00,
+	0xf6, 0x16, 0x43, 0x12, 0x1b, 0xd8, 0xb7, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0xd1, 0xe8,
+	0x6a, 0xab, 0xfe, 0x00, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -166,8 +176,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type AuthServiceClient interface {
-	GetProfileIDByToken(ctx context.Context, in *ProfileID, opts ...grpc.CallOption) (*ProfileID, error)
-	DeleteAllSessionsByID(ctx context.Context, in *ProfileID, opts ...grpc.CallOption) (*Void, error)
+	GetProfileID(ctx context.Context, in *AuthInfo, opts ...grpc.CallOption) (*ProfileID, error)
+	DeleteAllSessions(ctx context.Context, in *ProfileID, opts ...grpc.CallOption) (*Void, error)
 }
 
 type authServiceClient struct {
@@ -178,18 +188,18 @@ func NewAuthServiceClient(cc *grpc.ClientConn) AuthServiceClient {
 	return &authServiceClient{cc}
 }
 
-func (c *authServiceClient) GetProfileIDByToken(ctx context.Context, in *ProfileID, opts ...grpc.CallOption) (*ProfileID, error) {
+func (c *authServiceClient) GetProfileID(ctx context.Context, in *AuthInfo, opts ...grpc.CallOption) (*ProfileID, error) {
 	out := new(ProfileID)
-	err := c.cc.Invoke(ctx, "/grpc.AuthService/GetProfileIDByToken", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/grpc.AuthService/GetProfileID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authServiceClient) DeleteAllSessionsByID(ctx context.Context, in *ProfileID, opts ...grpc.CallOption) (*Void, error) {
+func (c *authServiceClient) DeleteAllSessions(ctx context.Context, in *ProfileID, opts ...grpc.CallOption) (*Void, error) {
 	out := new(Void)
-	err := c.cc.Invoke(ctx, "/grpc.AuthService/DeleteAllSessionsByID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/grpc.AuthService/DeleteAllSessions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -198,46 +208,46 @@ func (c *authServiceClient) DeleteAllSessionsByID(ctx context.Context, in *Profi
 
 // AuthServiceServer is the server API for AuthService service.
 type AuthServiceServer interface {
-	GetProfileIDByToken(context.Context, *ProfileID) (*ProfileID, error)
-	DeleteAllSessionsByID(context.Context, *ProfileID) (*Void, error)
+	GetProfileID(context.Context, *AuthInfo) (*ProfileID, error)
+	DeleteAllSessions(context.Context, *ProfileID) (*Void, error)
 }
 
 func RegisterAuthServiceServer(s *grpc.Server, srv AuthServiceServer) {
 	s.RegisterService(&_AuthService_serviceDesc, srv)
 }
 
-func _AuthService_GetProfileIDByToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ProfileID)
+func _AuthService_GetProfileID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthInfo)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).GetProfileIDByToken(ctx, in)
+		return srv.(AuthServiceServer).GetProfileID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpc.AuthService/GetProfileIDByToken",
+		FullMethod: "/grpc.AuthService/GetProfileID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).GetProfileIDByToken(ctx, req.(*ProfileID))
+		return srv.(AuthServiceServer).GetProfileID(ctx, req.(*AuthInfo))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_DeleteAllSessionsByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AuthService_DeleteAllSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProfileID)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).DeleteAllSessionsByID(ctx, in)
+		return srv.(AuthServiceServer).DeleteAllSessions(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpc.AuthService/DeleteAllSessionsByID",
+		FullMethod: "/grpc.AuthService/DeleteAllSessions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).DeleteAllSessionsByID(ctx, req.(*ProfileID))
+		return srv.(AuthServiceServer).DeleteAllSessions(ctx, req.(*ProfileID))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -247,12 +257,12 @@ var _AuthService_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*AuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetProfileIDByToken",
-			Handler:    _AuthService_GetProfileIDByToken_Handler,
+			MethodName: "GetProfileID",
+			Handler:    _AuthService_GetProfileID_Handler,
 		},
 		{
-			MethodName: "DeleteAllSessionsByID",
-			Handler:    _AuthService_DeleteAllSessionsByID_Handler,
+			MethodName: "DeleteAllSessions",
+			Handler:    _AuthService_DeleteAllSessions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
