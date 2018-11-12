@@ -7,5 +7,5 @@ RUN make build && mv ./_build/service /tmp/service
 FROM alpine:latest
 WORKDIR /tmp
 COPY --from=base /tmp/service .
-ENTRYPOINT ./service --http_port=80
-EXPOSE 80
+ENTRYPOINT ./service --http_port=80 --grpc_port=3000
+EXPOSE 80 3000
