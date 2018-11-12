@@ -49,7 +49,7 @@ func (r *SessionRepository) CheckSession(session domains.Session) error {
 	if err := cmd.Err(); err != nil {
 		return wrapError(err)
 	}
-	if v != cmd.String() {
+	if v != cmd.Val() {
 		return errs.NewNotAuthorizedError()
 	}
 	return nil

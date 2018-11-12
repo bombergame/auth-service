@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 	"github.com/bombergame/auth-service/config"
+	"github.com/bombergame/auth-service/domains"
 	"github.com/bombergame/auth-service/repositories"
 	"github.com/bombergame/auth-service/utils"
 	"github.com/bombergame/common/logs"
@@ -53,7 +54,27 @@ func (srv *Service) Shutdown() error {
 }
 
 func (srv *Service) GetProfileID(ctx context.Context, req *AuthInfo) (*ProfileID, error) {
-	return nil, nil //TODO
+	info, err := srv.config.TokenManager.ParseToken(req.Token)
+	if err != nil {
+		return nil, err
+	}
+
+	err = srv.config.SessionRepository.CheckSession(
+		domains.Session{
+			ProfileID: info.ProfileID,
+			UserAgent: info.UserAgent,
+			AuthToken: req.Token,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	pID := &ProfileID{
+		Value: info.ProfileID,
+	}
+
+	return pID, nil
 }
 
 func (srv *Service) DeleteAllSessions(ctx context.Context, req *ProfileID) (*Void, error) {

@@ -1,8 +1,9 @@
 package jwt
 
 import (
+	"github.com/bombergame/auth-service/config"
 	"github.com/bombergame/auth-service/utils"
-	"github.com/bombergame/common/env"
+	"github.com/bombergame/common/consts"
 	"github.com/bombergame/common/errs"
 	"github.com/dgrijalva/jwt-go"
 	"math/rand"
@@ -17,8 +18,8 @@ type TokenManager struct {
 }
 
 func NewTokenManager() *TokenManager {
-	key := env.GetVar("TOKEN_SIGN_KEY", "")
-	if key == "" {
+	key := config.TokenSignKey
+	if key == consts.EmptyString {
 		key = generateKey()
 	}
 
