@@ -84,7 +84,7 @@ func (srv *Service) deleteSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func (srv *Service) readUserAgent(r *http.Request) (string, error) {
-	return srv.readHeaderString("X-User-Agent", r)
+	return srv.readHeaderString("User-Agent", r)
 }
 
 func (srv *Service) readAuthToken(r *http.Request) (string, error) {
