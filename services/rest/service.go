@@ -2,7 +2,7 @@ package rest
 
 import (
 	"context"
-	profilesgrpc "github.com/bombergame/auth-service/clients/profiles-service/grpc"
+	"github.com/bombergame/auth-service/clients/profiles-service/grpc"
 	"github.com/bombergame/auth-service/config"
 	"github.com/bombergame/auth-service/repositories"
 	"github.com/bombergame/auth-service/utils"

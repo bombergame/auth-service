@@ -1,7 +1,7 @@
 package rest
 
 import (
-	profilesgrpc "github.com/bombergame/auth-service/clients/profiles-service/grpc"
+	"github.com/bombergame/auth-service/clients/profiles-service/grpc"
 	"github.com/bombergame/auth-service/domains"
 	"github.com/bombergame/auth-service/utils"
 	"net/http"
