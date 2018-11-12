@@ -2,6 +2,7 @@ package main
 
 import (
 	profilesgrpc "github.com/bombergame/auth-service/clients/profiles-service/grpc"
+	"github.com/bombergame/auth-service/repositories/redis"
 	"github.com/bombergame/auth-service/services/rest"
 	"github.com/bombergame/auth-service/utils/jwt"
 	"github.com/bombergame/common/logs"
@@ -11,6 +12,14 @@ import (
 
 func main() {
 	logger := logs.NewLogger()
+
+	conn := redis.NewConnection()
+
+	defer conn.Close()
+	if err := conn.Open(); err != nil {
+		logger.Fatal(err)
+		return
+	}
 
 	profilesGrpc := profilesgrpc.NewClient(
 		&profilesgrpc.Config{
@@ -26,9 +35,10 @@ func main() {
 
 	restSrv := rest.NewService(
 		&rest.Config{
-			Logger:       logger,
-			TokenManager: jwt.NewTokenManager(),
-			ProfilesGrpc: profilesGrpc,
+			Logger:            logger,
+			TokenManager:      jwt.NewTokenManager(),
+			SessionRepository: redis.NewSessionRepository(conn),
+			ProfilesGrpc:      profilesGrpc,
 		},
 	)
 

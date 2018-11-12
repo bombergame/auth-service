@@ -2,6 +2,7 @@ package rest
 
 import (
 	profilesgrpc "github.com/bombergame/auth-service/clients/profiles-service/grpc"
+	"github.com/bombergame/auth-service/domains"
 	"github.com/bombergame/auth-service/utils"
 	"github.com/bombergame/common/consts"
 	"github.com/bombergame/common/errs"
@@ -48,16 +49,32 @@ func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session := Session{
-		ProfileID: id.Value,
-		AuthToken: token,
+	err = srv.config.SessionRepository.AddSession(
+		domains.Session{
+			ProfileID: id.Value,
+			UserAgent: userAgent,
+			AuthToken: token,
+		},
+	)
+	if err != nil {
+		srv.writeErrorWithBody(w, err)
+		return
 	}
 
-	srv.writeOkWithBody(w, session)
+	srv.writeOkWithBody(w, Session{
+		ProfileID: id.Value,
+		AuthToken: token,
+	})
 }
 
 func (srv *Service) deleteSession(w http.ResponseWriter, r *http.Request) {
-	_, err := srv.readAuthToken(r)
+	_, err := srv.readUserAgent(r)
+	if err != nil {
+		srv.writeErrorWithBody(w, err)
+		return
+	}
+
+	_, err = srv.readAuthToken(r)
 	if err != nil {
 		srv.writeErrorWithBody(w, err)
 		return

@@ -50,7 +50,6 @@ func (srv *Service) writeOk(w http.ResponseWriter) {
 
 func (srv *Service) writeOkWithBody(w http.ResponseWriter, v interface{}) {
 	srv.writeJSON(w, http.StatusOK, v)
-	srv.writeOk(w)
 }
 
 func (srv *Service) writeError(w http.ResponseWriter, status int) {

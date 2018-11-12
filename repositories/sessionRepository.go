@@ -5,7 +5,7 @@ import (
 )
 
 type SessionRepository interface {
-	CreateSession(session domains.Session) error
-	GetProfileIDByAuthToken(token string) (*int64, error)
+	AddSession(session domains.Session) error
+	CheckSession(session domains.Session) error
 	DeleteAllSessionsByProfileID(id int64) error
 }
