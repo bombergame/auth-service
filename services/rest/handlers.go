@@ -4,8 +4,6 @@ import (
 	profilesgrpc "github.com/bombergame/auth-service/clients/profiles-service/grpc"
 	"github.com/bombergame/auth-service/domains"
 	"github.com/bombergame/auth-service/utils"
-	"github.com/bombergame/common/consts"
-	"github.com/bombergame/common/errs"
 	"net/http"
 )
 
@@ -81,22 +79,4 @@ func (srv *Service) deleteSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	srv.writeOk(w)
-}
-
-func (srv *Service) readUserAgent(r *http.Request) (string, error) {
-	return srv.readHeaderString("User-Agent", r)
-}
-
-func (srv *Service) readAuthToken(r *http.Request) (string, error) {
-	bearer, err := srv.readHeaderString("Authorization", r)
-	if err != nil {
-		return bearer, err
-	}
-
-	n := len("Bearer ")
-	if len(bearer) <= n {
-		return consts.EmptyString, errs.NewInvalidFormatError("wrong authorization token")
-	}
-
-	return bearer[n:], nil
 }

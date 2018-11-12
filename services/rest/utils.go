@@ -90,3 +90,21 @@ func (srv *Service) writeJSON(w http.ResponseWriter, status int, v interface{}) 
 	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(v)
 }
+
+func (srv *Service) readUserAgent(r *http.Request) (string, error) {
+	return srv.readHeaderString("User-Agent", r)
+}
+
+func (srv *Service) readAuthToken(r *http.Request) (string, error) {
+	bearer, err := srv.readHeaderString("Authorization", r)
+	if err != nil {
+		return consts.EmptyString, err
+	}
+
+	n := len("Bearer ")
+	if len(bearer) <= n {
+		return consts.EmptyString, errs.NewInvalidFormatError("wrong authorization token")
+	}
+
+	return bearer[n:], nil
+}

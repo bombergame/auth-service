@@ -22,6 +22,9 @@ func main() {
 		return
 	}
 
+	tokenManager := jwt.NewTokenManager()
+	sessionRepository := redis.NewSessionRepository(conn)
+
 	profilesGrpc := profilesgrpc.NewClient(
 		&profilesgrpc.Config{
 			Logger: logger,
@@ -33,9 +36,6 @@ func main() {
 		logger.Fatal(err)
 		return
 	}
-
-	tokenManager := jwt.NewTokenManager()
-	sessionRepository := redis.NewSessionRepository(conn)
 
 	restSrv := rest.NewService(
 		&rest.Config{
