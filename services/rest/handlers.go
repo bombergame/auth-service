@@ -66,13 +66,25 @@ func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func (srv *Service) deleteSession(w http.ResponseWriter, r *http.Request) {
-	_, err := srv.readUserAgent(r)
+	authToken, err := srv.readAuthToken(r)
 	if err != nil {
 		srv.writeErrorWithBody(w, err)
 		return
 	}
 
-	_, err = srv.readAuthToken(r)
+	userInfo, err := srv.config.TokenManager.ParseToken(authToken)
+	if err != nil {
+		srv.writeErrorWithBody(w, err)
+		return
+	}
+
+	err = srv.config.SessionRepository.DeleteSession(
+		domains.Session{
+			AuthToken: authToken,
+			ProfileID: userInfo.ProfileID,
+			UserAgent: userInfo.UserAgent,
+		},
+	)
 	if err != nil {
 		srv.writeErrorWithBody(w, err)
 		return

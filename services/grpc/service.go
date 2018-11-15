@@ -78,5 +78,12 @@ func (srv *Service) GetProfileID(ctx context.Context, req *AuthInfo) (*ProfileID
 }
 
 func (srv *Service) DeleteAllSessions(ctx context.Context, req *ProfileID) (*Void, error) {
-	return nil, nil //TODO
+	id := req.Value
+
+	err := srv.config.SessionRepository.DeleteAllSessions(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Void{}, nil
 }

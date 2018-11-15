@@ -7,5 +7,6 @@ import (
 type SessionRepository interface {
 	AddSession(session domains.Session) error
 	CheckSession(session domains.Session) error
-	DeleteAllSessionsByProfileID(id int64) error
+	DeleteSession(session domains.Session) error
+	DeleteAllSessions(profileID int64) error
 }
