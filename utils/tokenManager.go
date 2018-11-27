@@ -1,8 +1,8 @@
 package utils
 
 type UserInfo struct {
-	ProfileID int64
-	UserAgent string
+	ProfileID int64  `mapstructure:"profile_id"`
+	UserAgent string `mapstructure:"user_agent"`
 }
 
 type TokenManager interface {

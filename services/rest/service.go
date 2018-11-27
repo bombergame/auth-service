@@ -1,55 +1,47 @@
 package rest
 
 import (
-	"context"
-	"github.com/bombergame/auth-service/clients/profiles-service/grpc"
 	"github.com/bombergame/auth-service/config"
-	"github.com/bombergame/auth-service/repositories"
-	"github.com/bombergame/auth-service/utils"
-	"github.com/bombergame/common/logs"
+	"github.com/bombergame/common/consts"
+	"github.com/bombergame/common/rest"
 	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
 	"net/http"
 )
 
 type Service struct {
-	config *Config
-	server http.Server
+	rest.Service
+	config     Config
+	components Components
 }
 
 type Config struct {
-	Logger            *logs.Logger
-	TokenManager      utils.TokenManager
-	SessionRepository repositories.SessionRepository
-	ProfilesGrpc      *profilesgrpc.Client
+	rest.Config
 }
 
-func NewService(c *Config) *Service {
+type Components struct {
+	rest.Components
+}
+
+func NewService(cf Config, cpn Components) *Service {
+	cf.Host, cf.Port = consts.EmptyString, config.HttpPort
+
 	srv := &Service{
-		config: c,
-		server: http.Server{
-			Addr: ":" + config.HttpPort,
-		},
+		Service: *rest.NewService(
+			cf.Config,
+			cpn.Components,
+		),
+		config:     cf,
+		components: cpn,
 	}
 
-	mx := mux.NewRouter()
-
-	mx.Handle("/session", handlers.MethodHandler{
-		http.MethodPost:   http.HandlerFunc(srv.createSession),
-		http.MethodDelete: http.HandlerFunc(srv.deleteSession),
+	mx := http.NewServeMux()
+	mx.Handle("/auth/session", handlers.MethodHandler{
+		http.MethodPost:   srv.WithAuth(http.HandlerFunc(srv.createSession)),
+		http.MethodPatch:  srv.WithAuth(http.HandlerFunc(srv.refreshSession)),
+		http.MethodDelete: srv.WithAuth(http.HandlerFunc(srv.deleteSession)),
 	})
 
-	srv.server.Handler = srv.withLogs(srv.withRecover(mx))
+	srv.SetHandler(srv.WithLogs(srv.WithRecover(mx)))
 
 	return srv
-}
-
-func (srv *Service) Run() error {
-	srv.config.Logger.Info("http service running on: " + srv.server.Addr)
-	return srv.server.ListenAndServe()
-}
-
-func (srv *Service) Shutdown() error {
-	srv.config.Logger.Info("http service shutdown initialized")
-	return srv.server.Shutdown(context.TODO())
 }

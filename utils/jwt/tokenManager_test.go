@@ -2,11 +2,12 @@ package jwt
 
 import (
 	"github.com/bombergame/auth-service/utils"
+	"github.com/bombergame/common/consts"
 	"testing"
 )
 
 func TestTokenManagerUnit(t *testing.T) {
-	manager := NewTokenManager()
+	manager := NewTokenManager(consts.EmptyString)
 	if manager == nil {
 		t.Error("token manager not created")
 	}

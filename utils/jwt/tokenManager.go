@@ -1,30 +1,34 @@
 package jwt
 
 import (
-	"github.com/bombergame/auth-service/config"
 	"github.com/bombergame/auth-service/utils"
 	"github.com/bombergame/common/consts"
 	"github.com/bombergame/common/errs"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/mitchellh/mapstructure"
 	"math/rand"
 )
 
 const (
-	DefaultKeyLength = 64
+	DefaultKeyLength  = 64
+	DefaultSaltLength = 32
 )
 
 type TokenManager struct {
-	key []byte
+	key        []byte
+	randSeqGen *randomSequenceGenerator
 }
 
-func NewTokenManager() *TokenManager {
-	key := config.TokenSignKey
+func NewTokenManager(key string) *TokenManager {
+	randSeqGen := newRandomSequenceGenerator()
+
 	if key == consts.EmptyString {
-		key = generateKey()
+		key = randSeqGen.get(DefaultKeyLength)
 	}
 
 	return &TokenManager{
-		key: []byte(key),
+		key:        []byte(key),
+		randSeqGen: randSeqGen,
 	}
 }
 
@@ -32,68 +36,64 @@ func (m *TokenManager) CreateToken(info utils.UserInfo) (string, error) {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"profile_id": info.ProfileID,
 		"user_agent": info.UserAgent,
+		"rand_salt":  m.randSeqGen.get(DefaultSaltLength),
 	})
 	return t.SignedString(m.key)
 }
 
 func (m *TokenManager) ParseToken(token string) (*utils.UserInfo, error) {
+	invFmtErr := errs.NewInvalidFormatError("wrong token")
+
 	t, err := jwt.Parse(token, func(tk *jwt.Token) (interface{}, error) {
 		if _, ok := tk.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errs.NewInvalidFormatError("wrong signing method")
+			return nil, invFmtErr
 		}
 		return m.key, nil
 	})
 
-	if err != nil {
-		return nil, errs.NewInvalidFormatError(err.Error())
+	if err != nil || !t.Valid {
+		return nil, invFmtErr
 	}
-
-	if !t.Valid {
-		return nil, errs.NewInvalidFormatError("wrong token")
-	}
-
-	errWrongClaims := errs.NewInvalidFormatError("wrong claims")
 
 	claims, ok := t.Claims.(jwt.MapClaims)
 	if !ok {
-		return nil, errWrongClaims
+		return nil, invFmtErr
 	}
 
-	vID, ok := claims["profile_id"]
-	if !ok {
-		return nil, errWrongClaims
+	info := &utils.UserInfo{}
+
+	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
+		Result: info, TagName: "mapstructure",
+	})
+	if err != nil {
+		return nil, errs.NewServiceError(err)
 	}
 
-	profileID, ok := vID.(float64)
-	if !ok {
-		return nil, errWrongClaims
-	}
-
-	vUserAgent, ok := claims["user_agent"]
-	if !ok {
-		return nil, errWrongClaims
-	}
-
-	userAgent := vUserAgent.(string)
-	if !ok {
-		return nil, errWrongClaims
-	}
-
-	info := &utils.UserInfo{
-		ProfileID: int64(profileID),
-		UserAgent: userAgent,
+	if err := decoder.Decode(claims); err != nil {
+		return nil, invFmtErr
 	}
 
 	return info, nil
 }
 
-func generateKey() string {
-	key := make([]rune, DefaultKeyLength)
-	runes := []rune(`abcdefghijklmnopqrstuvwxyz1234567890@#$^&*()_-=+`)
+type randomSequenceGenerator struct {
+	numRunes int
+	runes    []rune
+}
 
-	n := len(runes)
-	for i := range key {
-		key[i] = runes[rand.Intn(n)]
+func newRandomSequenceGenerator() *randomSequenceGenerator {
+	runes := []rune(`abcdefghijklmnopqrstuvwxyz1234567890@#$^&*()_-=+`)
+	return &randomSequenceGenerator{
+		runes:    runes,
+		numRunes: len(runes),
+	}
+}
+
+func (g *randomSequenceGenerator) get(keyLen int) string {
+	key := make([]rune, g.numRunes)
+
+	for i := range g.runes {
+		key[i] = g.runes[rand.Intn(g.numRunes)]
 	}
 
 	return string(key)
