@@ -12,10 +12,6 @@ var (
 
 	TokenSignKey = env.GetVar("TOKEN_SIGN_KEY", consts.EmptyString)
 
-	SessionsStorageAddress  = env.GetVar("SESSIONS_STORAGE_ADDRESS", "127.0.0.1:6379")
-	SessionsStoragePassword = env.GetVar("SESSIONS_STORAGE_PASSWORD", consts.EmptyString)
-	SessionExpireTime       = env.GetVar("SESSION_EXPIRE_TIME", "14400")
-
 	ProfilesServiceGrpcAddress = env.GetVar(
 		"PROFILES_SERVICE_GRPC_ADDRESS",
 		"profiles-service:3000",

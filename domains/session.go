@@ -1,7 +1,9 @@
 package domains
 
+//easyjson:json
 type Session struct {
-	ProfileID int64
-	UserAgent string
-	AuthToken string
+	ProfileID    int64  `json:"profile_id"`
+	UserAgent    string `json:"-"`
+	AuthToken    string `json:"auth_token"`
+	RefreshToken string `json:"refresh_token"`
 }
