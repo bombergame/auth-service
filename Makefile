@@ -1,5 +1,8 @@
 all: build
 
+generate:
+	go generate ./...
+
 prepare:
 	easyjson -all ./services/rest/models.go
 	protoc -I services/grpc/ services/grpc/service.proto --go_out=plugins=grpc:services/grpc

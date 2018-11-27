@@ -1,4 +1,4 @@
-package utils
+package auth
 
 type UserInfo struct {
 	ProfileID int64  `mapstructure:"profile_id"`

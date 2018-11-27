@@ -5,7 +5,7 @@ import (
 	"github.com/bombergame/auth-service/config"
 	"github.com/bombergame/auth-service/domains"
 	"github.com/bombergame/auth-service/repositories"
-	"github.com/bombergame/auth-service/utils"
+	"github.com/bombergame/common/auth"
 	"github.com/bombergame/common/logs"
 	"google.golang.org/grpc"
 	"net"
@@ -18,7 +18,7 @@ type Service struct {
 
 type Config struct {
 	Logger            *logs.Logger
-	TokenManager      utils.TokenManager
+	TokenManager      auth.TokenManager
 	SessionRepository repositories.SessionRepository
 }
 

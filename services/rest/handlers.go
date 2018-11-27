@@ -1,10 +1,9 @@
 package rest
 
 import (
-	"github.com/bombergame/auth-service/clients/profiles-service/grpc"
 	"github.com/bombergame/auth-service/domains"
-	"github.com/bombergame/auth-service/utils"
 	"github.com/bombergame/common/auth"
+	"math/rand"
 	"net/http"
 )
 
@@ -26,44 +25,39 @@ func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//id, err := srv.config.ProfilesGrpc.GetProfileIDByCredentials(
-	//	&profilesgrpc.Credentials{
-	//		Username: cr.Username,
-	//		Password: cr.Password,
-	//	},
-	//)
-	//if err != nil {
-	//	srv.writeErrorWithBody(w, err)
-	//	return
-	//}
+	id := rand.Int63() //TODO
 
-	//token, err := srv.config.TokenManager.CreateToken(
-	//	utils.UserInfo{
-	//		ProfileID: id.Value,
-	//		UserAgent: userAgent,
-	//	},
-	//)
-	//if err != nil {
-	//	srv.writeErrorWithBody(w, err)
-	//	return
-	//}
-	//
-	//err = srv.config.SessionRepository.AddSession(
-	//	domains.Session{
-	//		ProfileID: id.Value,
-	//		UserAgent: userAgent,
-	//		AuthToken: token,
-	//	},
-	//)
-	//if err != nil {
-	//	srv.writeErrorWithBody(w, err)
-	//	return
-	//}
-	//
-	//srv.writeOkWithBody(w, Session{
-	//	ProfileID: id.Value,
-	//	AuthToken: token,
-	//})
+	userInfo := auth.UserInfo{
+		ProfileID: id,
+		UserAgent: userAgent,
+	}
+
+	authToken, err := srv.components.authTokenManager.CreateToken(userInfo)
+	if err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	refreshToken, err := srv.components.refreshTokenManager.CreateToken(userInfo)
+	if err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	session := domains.Session{
+		ProfileID:    id,
+		UserAgent:    userAgent,
+		AuthToken:    authToken,
+		RefreshToken: refreshToken,
+	}
+
+	err = srv.components.sessionRepository.AddSession(session)
+	if err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	srv.WriteOkWithBody(w, session)
 }
 
 func (srv *Service) refreshSession(w http.ResponseWriter, r *http.Request) {
@@ -71,29 +65,5 @@ func (srv *Service) refreshSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func (srv *Service) deleteSession(w http.ResponseWriter, r *http.Request) {
-	authToken, err := srv.ReadAuthToken(r)
-	if err != nil {
-		srv.WriteErrorWithBody(w, err)
-		return
-	}
-
-	userInfo, err := srv.config.TokenManager.ParseToken(authToken)
-	if err != nil {
-		srv.writeErrorWithBody(w, err)
-		return
-	}
-
-	err = srv.config.SessionRepository.DeleteSession(
-		domains.Session{
-			AuthToken: authToken,
-			ProfileID: userInfo.ProfileID,
-			UserAgent: userInfo.UserAgent,
-		},
-	)
-	if err != nil {
-		srv.writeErrorWithBody(w, err)
-		return
-	}
-
-	srv.writeOk(w)
+	//TODO
 }

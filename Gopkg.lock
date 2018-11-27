@@ -3,7 +3,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:ca22b32d2dcacb04d4637f0784c6aa7de6664c45e4adbb600d3f805cc13a0318"
+  digest = "1:8927654238e47b038cf1fb67c4c1e6b475e70ba510db9c220d158ef2f5ecea8d"
   name = "github.com/bombergame/common"
   packages = [
     "args",
@@ -15,15 +15,7 @@
     "rest",
   ]
   pruneopts = "UT"
-  revision = "995d5d38b0c4b77350620f81f261cded439b4432"
-
-[[projects]]
-  digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
-  name = "github.com/dgrijalva/jwt-go"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
-  version = "v3.2.0"
+  revision = "882b9b2dd596364fb3d3ebf3c61321998e5abcc0"
 
 [[projects]]
   digest = "1:4c0989ca0bcd10799064318923b9bc2db6b4d6338dd75f3f2d86c3511aaaf5cf"
@@ -67,14 +59,6 @@
   ]
   pruneopts = "UT"
   revision = "60711f1a8329503b04e1c88535f419d0bb440bff"
-
-[[projects]]
-  digest = "1:53bc4cd4914cd7cd52139990d5170d6dc99067ae31c56530621b18b35fc30318"
-  name = "github.com/mitchellh/mapstructure"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "3536a929edddb9a5b34bd6861dc4a9647cb459fe"
-  version = "v1.1.2"
 
 [[projects]]
   digest = "1:69b1cc331fca23d702bd72f860c6a647afd0aa9fcbc1d0659b1365e26546dd70"
@@ -196,10 +180,8 @@
     "github.com/bombergame/common/errs",
     "github.com/bombergame/common/logs",
     "github.com/bombergame/common/rest",
-    "github.com/dgrijalva/jwt-go",
     "github.com/golang/protobuf/proto",
     "github.com/gorilla/handlers",
-    "github.com/mitchellh/mapstructure",
     "google.golang.org/grpc",
   ]
   solver-name = "gps-cdcl"
