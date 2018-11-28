@@ -1,4 +1,8 @@
-required = ["github.com/golang/protobuf/protoc-gen-go"]
+required = [
+  "github.com/golang/protobuf/protoc-gen-go",
+  "golang.org/x/tools/cmd/cover",
+  "github.com/mattn/goveralls"
+]
 
 [prune]
   go-tests = true

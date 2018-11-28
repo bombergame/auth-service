@@ -11,9 +11,6 @@ jobs:
     - make clean
 
   - stage: run unit tests
-    before_script:
-    - go get golang.org/x/tools/cmd/cover
-    - go get github.com/mattn/goveralls
     script:
     - make run_unit_tests
     after_success:
