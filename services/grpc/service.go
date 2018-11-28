@@ -1,4 +1,4 @@
-package grpc
+package authgrpc
 
 import (
 	"context"
@@ -10,28 +10,28 @@ import (
 
 type Service struct {
 	grpc.Service
-	config     Config
-	components Components
+	config     ServiceConfig
+	components ServiceComponents
 }
 
-type Config struct {
-	grpc.Config
+type ServiceConfig struct {
+	grpc.ServiceConfig
 }
 
-type Components struct {
-	grpc.Components
+type ServiceComponents struct {
+	grpc.ServiceComponents
 	SessionRepository repositories.SessionRepository
 }
 
-func NewService(cf Config, cp Components) *Service {
+func NewService(cf ServiceConfig, cp ServiceComponents) *Service {
 	cf.Host, cf.Port = consts.EmptyString, config.GrpcPort
 
 	srv := &Service{
 		config:     cf,
 		components: cp,
 		Service: *grpc.NewService(
-			cf.Config,
-			cp.Components,
+			cf.ServiceConfig,
+			cp.ServiceComponents,
 		),
 	}
 

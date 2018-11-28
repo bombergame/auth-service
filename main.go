@@ -42,12 +42,12 @@ func main() {
 		},
 	)
 
-	grpcSrv := grpc.NewService(
-		grpc.Config{
-			Config: grpcservice.Config{},
+	grpcSrv := authgrpc.NewService(
+		authgrpc.ServiceConfig{
+			ServiceConfig: grpcservice.ServiceConfig{},
 		},
-		grpc.Components{
-			Components: grpcservice.Components{
+		authgrpc.ServiceComponents{
+			ServiceComponents: grpcservice.ServiceComponents{
 				Logger: logger,
 			},
 			SessionRepository: mysql.NewSessionRepository(conn),
