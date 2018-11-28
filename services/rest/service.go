@@ -48,14 +48,7 @@ func NewService(cf Config, cpn Components) *Service {
 		http.MethodDelete: http.HandlerFunc(srv.deleteSession),
 	})
 
-	cors := rest.CORS{
-		Origins:     []string{"http://127.0.0.1:8000"},
-		Methods:     []string{http.MethodPost, http.MethodPatch, http.MethodDelete, http.MethodOptions},
-		Headers:     []string{"Authorization", "Content-Type", "Content-Length", "User-Agent"},
-		Credentials: true,
-	}
-
-	srv.SetHandler(srv.WithLogs(srv.WithRecover(srv.WithCORS(mx, cors))))
+	srv.SetHandler(srv.WithLogs(srv.WithRecover(mx)))
 
 	return srv
 }
