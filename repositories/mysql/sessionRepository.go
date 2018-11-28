@@ -72,7 +72,19 @@ func (r *SessionRepository) DeleteSession(session domains.Session) error {
 }
 
 func (r *SessionRepository) DeleteAllSessions(profileID int64) error {
-	return nil //TODO
+	statement, err := r.conn.db.Prepare(
+		`DELETE FROM session WHERE profile_id = ?;`,
+	)
+	if err != nil {
+		return errs.NewServiceError(err)
+	}
+
+	_, err = statement.Exec(profileID)
+	if err != nil {
+		return r.wrapError(err)
+	}
+
+	return nil
 }
 
 func (r *SessionRepository) wrapError(err error) error {
