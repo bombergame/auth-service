@@ -1,16 +1,17 @@
-package authgrpc
+package profilesgrpc
 
 import (
 	"context"
 	"github.com/bombergame/common/errs"
 	"github.com/bombergame/common/grpc"
+	"strings"
 )
 
 type Client struct {
 	grpc.Client
 	config     ClientConfig
 	components ClientComponents
-	client     AuthServiceClient
+	client     ProfilesServiceClient
 }
 
 type ClientConfig struct {
@@ -38,10 +39,10 @@ func (c *Client) Connect() error {
 		return err
 	}
 
-	c.client = NewAuthServiceClient(c.Conn)
+	c.client = NewProfilesServiceClient(c.Conn)
 
 	addr := c.Config.ServiceHost + ":" + c.Config.ServicePort
-	c.Logger().Info("auth-service grpc client connection: " + addr)
+	c.Logger().Info("profiles-service grpc client connection: " + addr)
 
 	return nil
 }
@@ -50,14 +51,22 @@ func (c *Client) Disconnect() error {
 	return c.Client.Disconnect()
 }
 
-func (c *Client) DeleteAllSessions(id ProfileID) error {
-	_, err := c.client.DeleteAllSessions(context.TODO(), &id)
+func (c *Client) IncProfileScore(profileID *ProfileID) (*Void, error) {
+	return nil, nil //TODO
+}
+
+func (c *Client) GetProfileIDByCredentials(credentials *Credentials) (*ProfileID, error) {
+	cr, err := c.client.GetProfileIDByCredentials(context.TODO(), credentials)
 	if err != nil {
-		return c.wrapError(err)
+		return nil, c.wrapError(err)
 	}
-	return nil
+	return cr, nil
 }
 
 func (c *Client) wrapError(err error) error {
+	errMsg := err.Error()
+	if strings.Contains(errMsg, "not found") {
+		return errs.NewNotFoundError("profile not found")
+	}
 	return errs.NewServiceError(err)
 }

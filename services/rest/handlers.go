@@ -4,7 +4,7 @@ import (
 	"github.com/bombergame/auth-service/domains"
 	"github.com/bombergame/common/auth"
 	"github.com/bombergame/common/errs"
-	"math/rand"
+	"github.com/bombergame/profiles-service/services/grpc"
 	"net/http"
 )
 
@@ -26,11 +26,21 @@ func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id := rand.Int63() //TODO
+	credentials := profilesgrpc.Credentials{
+		Username: c.Username,
+		Password: c.Password,
+	}
+
+	pID, err := srv.components.ProfilesClient.GetProfileIDByCredentials(&credentials)
+	if err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
 	expireTime := srv.getTokenExpireTime()
 
 	tokenInfo := auth.TokenInfo{
-		ProfileID:  srv.formatInt64(id),
+		ProfileID:  srv.formatInt64(pID.Value),
 		UserAgent:  userAgent,
 		ExpireTime: expireTime.Format(auth.ExpireTimeFormat),
 	}
@@ -48,7 +58,7 @@ func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session := domains.Session{
-		ProfileID:    id,
+		ProfileID:    pID.Value,
 		UserAgent:    userAgent,
 		AuthToken:    authToken,
 		RefreshToken: refreshToken,

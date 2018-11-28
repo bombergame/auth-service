@@ -22,6 +22,19 @@
   revision = "9eedf4a0e52f2f35808c6d9ab6a978c0790fde9a"
 
 [[projects]]
+  branch = "master"
+  digest = "1:4609c75270d23792f642c13ffb9c516803ac73f1bf5ac99f214939c700abdc68"
+  name = "github.com/bombergame/profiles-service"
+  packages = [
+    "config",
+    "domains",
+    "repositories",
+    "services/grpc",
+  ]
+  pruneopts = "UT"
+  revision = "62c2aeb8bdb993d6bfe863f7b5c9e14d71055d8e"
+
+[[projects]]
   digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
@@ -230,6 +243,7 @@
     "github.com/bombergame/common/grpc",
     "github.com/bombergame/common/logs",
     "github.com/bombergame/common/rest",
+    "github.com/bombergame/profiles-service/services/grpc",
     "github.com/go-sql-driver/mysql",
     "github.com/golang/protobuf/proto",
     "github.com/gorilla/handlers",

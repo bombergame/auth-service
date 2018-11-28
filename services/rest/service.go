@@ -6,6 +6,7 @@ import (
 	"github.com/bombergame/common/auth"
 	"github.com/bombergame/common/consts"
 	"github.com/bombergame/common/rest"
+	"github.com/bombergame/profiles-service/services/grpc"
 	"github.com/gorilla/handlers"
 	"net/http"
 )
@@ -25,6 +26,7 @@ type Components struct {
 	AuthTokenManager    auth.TokenManager
 	RefreshTokenManager auth.TokenManager
 	SessionRepository   repositories.SessionRepository
+	ProfilesClient      *profilesgrpc.Client
 }
 
 func NewService(cf Config, cpn Components) *Service {
