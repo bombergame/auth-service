@@ -12,11 +12,11 @@ var (
 
 	TokenSignKey = env.GetVar("TOKEN_SIGN_KEY", consts.EmptyString)
 
-	StorageUser     = env.GetVar("STORAGE_USER", "user")
-	StoragePassword = env.GetVar("STORAGE_PASSWORD", "password")
-	StorageHost     = env.GetVar("STORAGE_HOST", "127.0.0.1")
-	StoragePort     = env.GetVar("STORAGE_PORT", "3306")
-	StorageName     = env.GetVar("STORAGE_NAME", "sessions")
+	StorageUser     = env.GetVar("SESSIONS_STORAGE_USER", "user")
+	StoragePassword = env.GetVar("SESSIONS_STORAGE_PASSWORD", "password")
+	StorageHost     = env.GetVar("SESSIONS_STORAGE_HOST", "127.0.0.1")
+	StoragePort     = env.GetVar("SESSIONS_STORAGE_PORT", "3306")
+	StorageName     = env.GetVar("SESSIONS_STORAGE_NAME", "sessions")
 
 	ProfilesServiceGrpcAddress = env.GetVar(
 		"PROFILES_SERVICE_GRPC_ADDRESS",
