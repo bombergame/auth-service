@@ -40,6 +40,10 @@ func NewService(cf ServiceConfig, cp ServiceComponents) *Service {
 	return srv
 }
 
-func (srv *Service) DeleteAllSessions(context.Context, *ProfileID) (*Void, error) {
-	return nil, nil //TODO
+func (srv *Service) DeleteAllSessions(ctx context.Context, id *ProfileID) (*Void, error) {
+	err := srv.components.SessionRepository.DeleteAllSessions(id.Value)
+	if err != nil {
+		return nil, err
+	}
+	return &Void{}, err
 }
