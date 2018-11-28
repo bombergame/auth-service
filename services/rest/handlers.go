@@ -115,5 +115,38 @@ func (srv *Service) refreshSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func (srv *Service) deleteSession(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	userAgent, err := srv.ReadUserAgent(r)
+	if err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	authToken, err := srv.ReadAuthToken(r)
+	if err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	tokenInfo, err := srv.components.AuthTokenManager.ParseToken(authToken)
+	if err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	if tokenInfo.UserAgent != userAgent {
+		err := errs.NewAccessDeniedError()
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	session := domains.Session{
+		ProfileID: srv.parseInt64(tokenInfo.ProfileID),
+		UserAgent: userAgent,
+	}
+	if err := srv.components.SessionRepository.DeleteSession(session); err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	srv.WriteOk(w)
 }

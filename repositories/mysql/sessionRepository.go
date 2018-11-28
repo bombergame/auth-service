@@ -56,7 +56,19 @@ func (r *SessionRepository) RefreshSession(session domains.Session) error {
 }
 
 func (r *SessionRepository) DeleteSession(session domains.Session) error {
-	return nil //TODO
+	statement, err := r.conn.db.Prepare(
+		`DELETE FROM session WHERE profile_id = ? AND user_agent = ?;`,
+	)
+	if err != nil {
+		return errs.NewServiceError(err)
+	}
+
+	_, err = statement.Exec(session.ProfileID, session.UserAgent)
+	if err != nil {
+		return r.wrapError(err)
+	}
+
+	return nil
 }
 
 func (r *SessionRepository) DeleteAllSessions(profileID int64) error {
