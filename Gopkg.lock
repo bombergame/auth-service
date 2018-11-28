@@ -3,7 +3,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:fbfe4604032944fdc5f5894ae11be081d59950f90d6a04c308de4723702cb4af"
+  digest = "1:4e9aa97da4d4a3137768e9137ca8ed4aae0eead172c545fa754b1e8d03fa3c99"
   name = "github.com/bombergame/common"
   packages = [
     "args",
@@ -13,12 +13,13 @@
     "consts",
     "env",
     "errs",
+    "grpc",
     "logs",
     "rest",
     "utils",
   ]
   pruneopts = "UT"
-  revision = "bc3bf517ce7227119a7a8944cc960aee00ed0ec1"
+  revision = "be2a429e1491542902b2501b52cbbbbc8f98c175"
 
 [[projects]]
   digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
@@ -226,6 +227,7 @@
     "github.com/bombergame/common/consts",
     "github.com/bombergame/common/env",
     "github.com/bombergame/common/errs",
+    "github.com/bombergame/common/grpc",
     "github.com/bombergame/common/logs",
     "github.com/bombergame/common/rest",
     "github.com/go-sql-driver/mysql",

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package authgrpc;
+package grpc;
 
 service AuthService {
     rpc DeleteAllSessions(ProfileID) returns(Void) {}

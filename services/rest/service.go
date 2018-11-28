@@ -47,9 +47,9 @@ func NewService(cf Config, cpn Components) *Service {
 	})
 
 	cors := rest.CORS{
-		Origins: []string{"http://127.0.0.1:8000"},
-		Methods: []string{http.MethodPost, http.MethodPatch, http.MethodDelete, http.MethodOptions},
-		Headers: []string{"Authorization","Content-Type","Content-Length","User-Agent"},
+		Origins:     []string{"http://127.0.0.1:8000"},
+		Methods:     []string{http.MethodPost, http.MethodPatch, http.MethodDelete, http.MethodOptions},
+		Headers:     []string{"Authorization", "Content-Type", "Content-Length", "User-Agent"},
 		Credentials: true,
 	}
 
