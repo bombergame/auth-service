@@ -7,9 +7,9 @@ import (
 	"github.com/bombergame/auth-service/services/rest"
 	"github.com/bombergame/common/auth/jwt"
 	"github.com/bombergame/common/auth/randtoken"
-	grpcservice "github.com/bombergame/common/grpc"
+	"github.com/bombergame/common/grpc"
 	"github.com/bombergame/common/logs"
-	restservice "github.com/bombergame/common/rest"
+	"github.com/bombergame/common/rest"
 	"os"
 	"os/signal"
 )
@@ -28,12 +28,12 @@ func main() {
 		}
 	}()
 
-	restSrv := rest.NewService(
-		rest.Config{
-			Config: restservice.Config{},
+	restSrv := authrest.NewService(
+		authrest.Config{
+			Config: rest.Config{},
 		},
-		rest.Components{
-			Components: restservice.Components{
+		authrest.Components{
+			Components: rest.Components{
 				Logger: logger,
 			},
 			AuthTokenManager:    jwt.NewTokenManager(config.TokenSignKey),
@@ -44,10 +44,10 @@ func main() {
 
 	grpcSrv := authgrpc.NewService(
 		authgrpc.ServiceConfig{
-			ServiceConfig: grpcservice.ServiceConfig{},
+			ServiceConfig: grpc.ServiceConfig{},
 		},
 		authgrpc.ServiceComponents{
-			ServiceComponents: grpcservice.ServiceComponents{
+			ServiceComponents: grpc.ServiceComponents{
 				Logger: logger,
 			},
 			SessionRepository: mysql.NewSessionRepository(conn),

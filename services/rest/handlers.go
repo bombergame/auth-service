@@ -1,4 +1,4 @@
-package rest
+package authrest
 
 import (
 	"github.com/bombergame/auth-service/domains"
