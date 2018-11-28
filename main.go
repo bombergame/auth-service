@@ -1,8 +1,13 @@
 package main
 
 import (
+	"github.com/bombergame/auth-service/config"
 	"github.com/bombergame/auth-service/repositories/mysql"
+	"github.com/bombergame/auth-service/services/rest"
+	"github.com/bombergame/common/auth/jwt"
+	"github.com/bombergame/common/auth/randtoken"
 	"github.com/bombergame/common/logs"
+	restservice "github.com/bombergame/common/rest"
 	"os"
 	"os/signal"
 )
@@ -21,14 +26,28 @@ func main() {
 		}
 	}()
 
+	restSrv := rest.NewService(
+		rest.Config{
+			Config: restservice.Config{},
+		},
+		rest.Components{
+			Components: restservice.Components{
+				Logger: logger,
+			},
+			AuthTokenManager:    jwt.NewTokenManager(config.TokenSignKey),
+			RefreshTokenManager: randtoken.NewTokenManager(),
+			SessionRepository:   mysql.NewSessionRepository(conn),
+		},
+	)
+
 	ch := make(chan os.Signal)
 	signal.Notify(ch, os.Interrupt)
 
-	//go func() {
-	//	if err := restSrv.Run(); err != nil {
-	//		logger.Fatal(err)
-	//	}
-	//}()
+	go func() {
+		if err := restSrv.Run(); err != nil {
+			logger.Fatal(err)
+		}
+	}()
 	//
 	//go func() {
 	//	if err := grpcSrv.Run(); err != nil {
@@ -38,7 +57,7 @@ func main() {
 
 	<-ch
 
-	//if err := restSrv.Shutdown(); err != nil {
-	//	logger.Fatal(err)
-	//}
+	if err := restSrv.Shutdown(); err != nil {
+		logger.Fatal(err)
+	}
 }

@@ -14,8 +14,7 @@ type Connection struct {
 
 func NewConnection() *Connection {
 	return &Connection{
-		str: fmt.Sprintf(
-			"postgres://%s:%s@%s:%s/%s?sslmode=%s",
+		str: fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
 			config.StorageUser, config.StoragePassword,
 			config.StorageHost, config.StoragePort, config.StorageName,
 		),

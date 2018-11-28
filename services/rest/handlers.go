@@ -32,13 +32,13 @@ func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
 		UserAgent: userAgent,
 	}
 
-	authToken, err := srv.components.authTokenManager.CreateToken(userInfo)
+	authToken, err := srv.components.AuthTokenManager.CreateToken(userInfo)
 	if err != nil {
 		srv.WriteErrorWithBody(w, err)
 		return
 	}
 
-	refreshToken, err := srv.components.refreshTokenManager.CreateToken(userInfo)
+	refreshToken, err := srv.components.RefreshTokenManager.CreateToken(userInfo)
 	if err != nil {
 		srv.WriteErrorWithBody(w, err)
 		return
@@ -51,7 +51,7 @@ func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
 		RefreshToken: refreshToken,
 	}
 
-	err = srv.components.sessionRepository.AddSession(session)
+	err = srv.components.SessionRepository.AddSession(session)
 	if err != nil {
 		srv.WriteErrorWithBody(w, err)
 		return

@@ -3,19 +3,30 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:8927654238e47b038cf1fb67c4c1e6b475e70ba510db9c220d158ef2f5ecea8d"
+  digest = "1:a945c3e87831677953f1b1c6c099bd75927674270a7ea4133c4f724074d02e94"
   name = "github.com/bombergame/common"
   packages = [
     "args",
     "auth",
+    "auth/jwt",
+    "auth/randtoken",
     "consts",
     "env",
     "errs",
     "logs",
     "rest",
+    "utils",
   ]
   pruneopts = "UT"
   revision = "882b9b2dd596364fb3d3ebf3c61321998e5abcc0"
+
+[[projects]]
+  digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
+  version = "v3.2.0"
 
 [[projects]]
   digest = "1:ec6f9bf5e274c833c911923c9193867f3f18788c461f76f05f62bb1510e0ae65"
@@ -78,6 +89,14 @@
   ]
   pruneopts = "UT"
   revision = "60711f1a8329503b04e1c88535f419d0bb440bff"
+
+[[projects]]
+  digest = "1:53bc4cd4914cd7cd52139990d5170d6dc99067ae31c56530621b18b35fc30318"
+  name = "github.com/mitchellh/mapstructure"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "3536a929edddb9a5b34bd6861dc4a9647cb459fe"
+  version = "v1.1.2"
 
 [[projects]]
   digest = "1:69b1cc331fca23d702bd72f860c6a647afd0aa9fcbc1d0659b1365e26546dd70"
@@ -202,6 +221,8 @@
   input-imports = [
     "github.com/bombergame/common/args",
     "github.com/bombergame/common/auth",
+    "github.com/bombergame/common/auth/jwt",
+    "github.com/bombergame/common/auth/randtoken",
     "github.com/bombergame/common/consts",
     "github.com/bombergame/common/env",
     "github.com/bombergame/common/errs",

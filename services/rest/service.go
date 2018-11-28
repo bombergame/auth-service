@@ -22,9 +22,9 @@ type Config struct {
 
 type Components struct {
 	rest.Components
-	authTokenManager    auth.TokenManager
-	refreshTokenManager auth.TokenManager
-	sessionRepository   repositories.SessionRepository
+	AuthTokenManager    auth.TokenManager
+	RefreshTokenManager auth.TokenManager
+	SessionRepository   repositories.SessionRepository
 }
 
 func NewService(cf Config, cpn Components) *Service {
@@ -41,7 +41,7 @@ func NewService(cf Config, cpn Components) *Service {
 
 	mx := http.NewServeMux()
 	mx.Handle("/auth/session", handlers.MethodHandler{
-		http.MethodPost:   srv.WithAuth(http.HandlerFunc(srv.createSession)),
+		http.MethodPost:   http.HandlerFunc(srv.createSession),
 		http.MethodPatch:  srv.WithAuth(http.HandlerFunc(srv.refreshSession)),
 		http.MethodDelete: srv.WithAuth(http.HandlerFunc(srv.deleteSession)),
 	})
