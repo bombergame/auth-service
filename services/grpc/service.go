@@ -20,7 +20,7 @@ type Config struct {
 
 type Components struct {
 	grpc.Components
-	sessionRepository repositories.SessionRepository
+	SessionRepository repositories.SessionRepository
 }
 
 func NewService(cf Config, cp Components) *Service {

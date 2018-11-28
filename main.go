@@ -3,9 +3,11 @@ package main
 import (
 	"github.com/bombergame/auth-service/config"
 	"github.com/bombergame/auth-service/repositories/mysql"
+	"github.com/bombergame/auth-service/services/grpc"
 	"github.com/bombergame/auth-service/services/rest"
 	"github.com/bombergame/common/auth/jwt"
 	"github.com/bombergame/common/auth/randtoken"
+	grpcservice "github.com/bombergame/common/grpc"
 	"github.com/bombergame/common/logs"
 	restservice "github.com/bombergame/common/rest"
 	"os"
@@ -40,6 +42,18 @@ func main() {
 		},
 	)
 
+	grpcSrv := grpc.NewService(
+		grpc.Config{
+			Config: grpcservice.Config{},
+		},
+		grpc.Components{
+			Components: grpcservice.Components{
+				Logger: logger,
+			},
+			SessionRepository: mysql.NewSessionRepository(conn),
+		},
+	)
+
 	ch := make(chan os.Signal)
 	signal.Notify(ch, os.Interrupt)
 
@@ -48,16 +62,20 @@ func main() {
 			logger.Fatal(err)
 		}
 	}()
-	//
-	//go func() {
-	//	if err := grpcSrv.Run(); err != nil {
-	//		logger.Fatal(err)
-	//	}
-	//}()
+
+	go func() {
+		if err := grpcSrv.Run(); err != nil {
+			logger.Fatal(err)
+		}
+	}()
 
 	<-ch
 
 	if err := restSrv.Shutdown(); err != nil {
+		logger.Fatal(err)
+	}
+
+	if err := grpcSrv.Shutdown(); err != nil {
 		logger.Fatal(err)
 	}
 }
