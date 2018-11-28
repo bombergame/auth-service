@@ -1,15 +1,15 @@
 package mysql
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/bombergame/auth-service/config"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
 )
 
 type Connection struct {
 	str string
-	db  *sqlx.DB
+	db  *sql.DB
 }
 
 func NewConnection() *Connection {
@@ -24,7 +24,7 @@ func NewConnection() *Connection {
 func (c *Connection) Open() error {
 	var err error
 
-	c.db, err = sqlx.Connect("mysql", c.str)
+	c.db, err = sql.Open("mysql", c.str)
 	if err != nil {
 		return err
 	}
