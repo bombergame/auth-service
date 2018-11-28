@@ -3,7 +3,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:a945c3e87831677953f1b1c6c099bd75927674270a7ea4133c4f724074d02e94"
+  digest = "1:fbfe4604032944fdc5f5894ae11be081d59950f90d6a04c308de4723702cb4af"
   name = "github.com/bombergame/common"
   packages = [
     "args",
@@ -18,7 +18,7 @@
     "utils",
   ]
   pruneopts = "UT"
-  revision = "882b9b2dd596364fb3d3ebf3c61321998e5abcc0"
+  revision = "bc3bf517ce7227119a7a8944cc960aee00ed0ec1"
 
 [[projects]]
   digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
@@ -132,14 +132,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:f343f077a5b0bc3a3788b3a04e24dd417e3e25b2acb529c413e212d2c42416ef"
+  digest = "1:0c7cb58af944f9690af91474a75371eecfe54c1ce3771a8dc08924430ee785d3"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "62eef0e2fa9b2c385f7b2778e763486da6880d37"
+  revision = "4ed8d59d0b35e1e29334a206d1b3f38b1e5dfb31"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"

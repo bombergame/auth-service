@@ -32,7 +32,27 @@ func (r *SessionRepository) AddSession(session domains.Session) error {
 }
 
 func (r *SessionRepository) RefreshSession(session domains.Session) error {
-	return nil //TODO
+	statement, err := r.conn.db.Prepare(
+		`SELECT EXISTS(SELECT * FROM session
+         	WHERE profile_id = ? AND user_agent = ? AND refresh_token = ?
+      	) AS token_exists;`,
+	)
+	if err != nil {
+		return errs.NewServiceError(err)
+	}
+
+	row := statement.QueryRow(session.ProfileID, session.UserAgent, session.RefreshToken)
+
+	var tokenExists int8
+	if err := row.Scan(&tokenExists); err != nil {
+		return errs.NewServiceError(err)
+	}
+
+	if tokenExists != 1 {
+		return errs.NewNotAuthorizedError()
+	}
+
+	return nil
 }
 
 func (r *SessionRepository) DeleteSession(session domains.Session) error {

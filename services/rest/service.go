@@ -42,8 +42,8 @@ func NewService(cf Config, cpn Components) *Service {
 	mx := http.NewServeMux()
 	mx.Handle("/auth/session", handlers.MethodHandler{
 		http.MethodPost:   http.HandlerFunc(srv.createSession),
-		http.MethodPatch:  srv.WithAuth(http.HandlerFunc(srv.refreshSession)),
-		http.MethodDelete: srv.WithAuth(http.HandlerFunc(srv.deleteSession)),
+		http.MethodPatch:  http.HandlerFunc(srv.refreshSession),
+		http.MethodDelete: http.HandlerFunc(srv.deleteSession),
 	})
 
 	srv.SetHandler(srv.WithLogs(srv.WithRecover(mx)))

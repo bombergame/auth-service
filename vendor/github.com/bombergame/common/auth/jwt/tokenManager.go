@@ -7,16 +7,15 @@ import (
 	"github.com/bombergame/common/utils"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/mitchellh/mapstructure"
+	"time"
 )
 
 const (
-	DefaultKeyLength  = 64
-	DefaultSaltLength = 32
+	DefaultKeyLength = 64
 )
 
 type TokenManager struct {
-	key        []byte
-	randSeqGen *utils.RandomSequenceGenerator
+	key []byte
 }
 
 func NewTokenManager(key string) *TokenManager {
@@ -27,21 +26,20 @@ func NewTokenManager(key string) *TokenManager {
 	}
 
 	return &TokenManager{
-		key:        []byte(key),
-		randSeqGen: randSeqGen,
+		key: []byte(key),
 	}
 }
 
-func (m *TokenManager) CreateToken(info auth.UserInfo) (string, error) {
+func (m *TokenManager) CreateToken(info auth.TokenInfo) (string, error) {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"profile_id": info.ProfileID,
-		"user_agent": info.UserAgent,
-		"rand_salt":  m.randSeqGen.Next(DefaultSaltLength),
+		"profile_id":  info.ProfileID,
+		"user_agent":  info.UserAgent,
+		"expire_time": time.Now().Format(auth.ExpireTimeFormat),
 	})
 	return t.SignedString(m.key)
 }
 
-func (m *TokenManager) ParseToken(token string) (*auth.UserInfo, error) {
+func (m *TokenManager) ParseToken(token string) (*auth.TokenInfo, error) {
 	invFmtErr := errs.NewInvalidFormatError("wrong token")
 
 	t, err := jwt.Parse(token, func(tk *jwt.Token) (interface{}, error) {
@@ -60,7 +58,7 @@ func (m *TokenManager) ParseToken(token string) (*auth.UserInfo, error) {
 		return nil, invFmtErr
 	}
 
-	info := &auth.UserInfo{}
+	info := &auth.TokenInfo{}
 
 	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
 		Result: info, TagName: "mapstructure",

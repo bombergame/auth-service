@@ -3,6 +3,7 @@ package rest
 import (
 	"github.com/bombergame/auth-service/domains"
 	"github.com/bombergame/common/auth"
+	"github.com/bombergame/common/errs"
 	"math/rand"
 	"net/http"
 )
@@ -26,19 +27,21 @@ func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := rand.Int63() //TODO
+	expireTime := srv.getTokenExpireTime()
 
-	userInfo := auth.UserInfo{
-		ProfileID: id,
-		UserAgent: userAgent,
+	tokenInfo := auth.TokenInfo{
+		ProfileID:  srv.formatInt64(id),
+		UserAgent:  userAgent,
+		ExpireTime: expireTime.Format(auth.ExpireTimeFormat),
 	}
 
-	authToken, err := srv.components.AuthTokenManager.CreateToken(userInfo)
+	authToken, err := srv.components.AuthTokenManager.CreateToken(tokenInfo)
 	if err != nil {
 		srv.WriteErrorWithBody(w, err)
 		return
 	}
 
-	refreshToken, err := srv.components.RefreshTokenManager.CreateToken(userInfo)
+	refreshToken, err := srv.components.RefreshTokenManager.CreateToken(tokenInfo)
 	if err != nil {
 		srv.WriteErrorWithBody(w, err)
 		return
@@ -61,7 +64,54 @@ func (srv *Service) createSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func (srv *Service) refreshSession(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	userAgent, err := srv.ReadUserAgent(r)
+	if err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	authToken, err := srv.ReadAuthToken(r)
+	if err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	tokenInfo, err := srv.components.AuthTokenManager.ParseToken(authToken)
+	if err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	if tokenInfo.UserAgent != userAgent {
+		err := errs.NewAccessDeniedError()
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	var session domains.Session
+	if err := srv.ReadRequestBody(&session, r); err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	session.ProfileID = srv.parseInt64(tokenInfo.ProfileID)
+	session.UserAgent = userAgent
+
+	if err := srv.components.SessionRepository.RefreshSession(session); err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	tokenInfo.ExpireTime = srv.getTokenExpireTime().Format(auth.ExpireTimeFormat)
+
+	newAuthToken, err := srv.components.AuthTokenManager.CreateToken(*tokenInfo)
+	if err != nil {
+		srv.WriteErrorWithBody(w, err)
+		return
+	}
+
+	session.AuthToken = newAuthToken
+	srv.WriteOkWithBody(w, session)
 }
 
 func (srv *Service) deleteSession(w http.ResponseWriter, r *http.Request) {
