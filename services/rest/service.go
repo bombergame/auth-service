@@ -8,6 +8,7 @@ import (
 	"github.com/bombergame/common/rest"
 	"github.com/bombergame/profiles-service/services/grpc"
 	"github.com/gorilla/handlers"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 )
 
@@ -47,6 +48,8 @@ func NewService(cf Config, cpn Components) *Service {
 		http.MethodPatch:  http.HandlerFunc(srv.refreshSession),
 		http.MethodDelete: http.HandlerFunc(srv.deleteSession),
 	})
+
+	mx.Handle("/metrics", promhttp.Handler())
 
 	srv.SetHandler(srv.WithLogs(srv.WithRecover(mx)))
 
